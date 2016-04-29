@@ -8,50 +8,63 @@ import {CORE_DIRECTIVES} from 'angular2/common';
   * Services
   */
 import {ArtistService} from 'services/ArtistService';
+import {BinaryLoadService} from 'services/BinaryLoadService';
+
 
 @Component({
   selector: 'playList',
   directives: [CORE_DIRECTIVES],
   template: `
-  <div *ngIf="Artrist">
-    <h1>{{ album.name }}</h1>
-    <h2>{{ album.artists[0].name }}</h2>
-
-    <p>
-      <img src="{{ album.images[1].url }}">
-    </p>
-
-    <h3>Tracks</h3>
-    <ol>
-      <li *ngFor="#t of album.tracks.items">
-        <a [routerLink]="['/Tracks', {id: t.id}]">
-          {{ t.name }}
-        </a>
-      </li>
-    </ol>
-  </div>
-  `
+              <div *ngIf="Artrist">
+                 <div class="row">
+                    <div class="col-sm-6 col-md-4" *ngFor="#t of results">
+                      <div class="thumbnail">
+                        <div class="content">
+                          <img src="{{ t.album.images[0].url }}" class="img-responsive">
+                          <div class="caption">
+                            <h3>
+                              <a [routerLink]="['/Artists', {id: t.artists[0].id}]">
+                                {{ t.artists[0].name }}
+                              </a>
+                            </h3>
+                            <br>
+                            <p>
+                              <a [routerLink]="['/Tracks', {id: t.id}]">
+                                {{ t.name }}
+                              </a>
+                            </p>
+                          </div>
+                          <div class="attribution">
+                            <h4>
+                              <a [routerLink]="['/Albums', {id: t.album.id}]">
+                                {{ t.album.name }}
+                              </a>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+            `
 })
-export class AlbumComponent implements OnInit {
-  id: string;
-  album: Object;
+export class PlayListComponent implements OnInit {
+  results: Object;
 
-  constructor(public routeParams: RouteParams, public spotify: SpotifyService,
-              public locationStrategy: LocationStrategy) {
-    this.id = routeParams.get('id');
+  constructor(public artistService: ArtistService,
+              public binaryLoadService:BinaryLoadService) {
   }
 
   ngOnInit(): void {
-    this.spotify
+    this.artistService
       .getAlbum(this.id)
-      .subscribe((res: any) => this.renderAlbum(res));
+      .subscribe((res: any) => this.renderResults(res));
   }
-
-  back(): void {
-    this.locationStrategy.back();
-  }
-
-  renderAlbum(res: any): void {
-    this.album = res;
+  
+  renderResults(res: any): void {
+    this.results = null;
+    if (res && res.tracks && res.tracks.items) {
+      this.results = res.tracks.items;
+    }
   }
 }
