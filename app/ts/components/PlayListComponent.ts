@@ -11,11 +11,14 @@ import {ArtistService} from 'services/ArtistService';
 import {BinaryLoadService} from 'services/BinaryLoadService';
 
 
+import {Artist} from '../models';
+
+
 @Component({
   selector: 'playList',
   directives: [CORE_DIRECTIVES],
   template: `
-              <div *ngIf="Artrist">
+              <div *ngIf="results">
                  <div class="row">
                     <div class="col-sm-6 col-md-4" *ngFor="#t of results">
                       <div class="thumbnail">
@@ -49,6 +52,7 @@ import {BinaryLoadService} from 'services/BinaryLoadService';
             `
 })
 export class PlayListComponent implements OnInit {
+  currentArtist:Artist;
   results: Object;
 
   constructor(public artistService: ArtistService,

@@ -8,24 +8,12 @@ import {Artist} from '../models';
  */
 @Injectable()
 export class ArtistService {
+  // `currentUser` contains the current user
+  currentArtist: Subject<Artist> = new BehaviorSubject<Artist>(null);
 
-  // `artists` is a observable that contains the mo
-  artists: Observable<Artist[]>;
-
-
-  // `current Artist` contains the current arist
-  currentArtist: Subject<Artist> = new BehaviorSubject< Artist>(null);
-
-  public setCurrentArtist(newArtist: Artist): void {
-     this.currentArtist.next(newArtist);
+  public setCurrentArist(newArtist: Artist): void {
+    this.currentArtist.next(newArtist);
   }
-
-
-  // an imperative function call to this action stream
-  addMessage(message: Artist): void {
-    this.newMessages.next(message);
-  }
-   
 }
 
 export var artistServiceInjectables: Array<any> = [
