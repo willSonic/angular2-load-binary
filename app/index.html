@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Binary Loading Service</title>
+
+    {% for (var css in o.htmlWebpackPlugin.files.css) { %}
+      <link href="{%=o.htmlWebpackPlugin.files.css[css] %}" rel="stylesheet">
+    {% } %}
+  </head>
+  <body class="container-fullwidth">
+    <div class="page-header">
+      <div class="container">
+        <h1>Wiki Audio Beat Loader <small>music for active people</small></h1>
+      </div>
+    </div>
+
+    <div id="content">
+      <div class="container">
+        <harness></harness>
+      </div>
+    </div>
+
+    <script src="/common.js"></script>
+    <script src="/vendor.js"></script>
+    <script src="/app.js"></script>
+  </body>
+</html>
