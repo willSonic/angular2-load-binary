@@ -14,7 +14,9 @@
     "typings/tsd.d.ts",
     "app/ts/app.ts",
     "app/ts/services/services.ts",
-    "app/ts/services/UserService.ts",
+    "app/ts/services/ArtistService.ts",
+    "app/ts/services/AudioService.ts",
+    "app/ts/services/BinaryLoadService.ts",
     "app/ts/util/uuid.ts",
     "app/ts/vendor.ts"
   ],

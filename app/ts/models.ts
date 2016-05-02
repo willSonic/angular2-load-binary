@@ -29,14 +29,12 @@ export class BinaryData {
 
 export class AudioData {
     id: string;
-    playedAt  : Date;
     author:Artist;
     binaryLoaded:boolean;
     binaryData:BinaryData;
 
     constructor(obj?: any) {
         this.id              = obj && obj.id            ||  uuid();
-        this.playedAt        = obj && obj.artistName    ||  Date;
         this.author          = obj && obj.author        ||  null;
         this.binaryLoaded    = obj && obj.binaryLoaded  ||  false;
         this.binaryData      = obj && obj.binaryData    ||  null;

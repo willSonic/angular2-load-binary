@@ -1,7 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import {Artist} from './models';
+import {Artist, AudioData, BinaryData} from './models';
+import {ArtistService} from './services/services';
 
 
 
@@ -33,13 +34,14 @@ export class BinaryLoadExampleData {
     static init(artistService: ArtistService): void {
 
         // TODO make `messages` hot
-        artistService.artists.subscribe(() => ({}));
+        artistService.artistList.subscribe(() => ({}));
 
         // set "Juliet" as the current user
        // userService.setCurrentUser(me);
 
         // create the initial messages
-        initialArtistList.map( (artist: Artist) => artistService.addArtist(artist) );
+        console.log("Passing Artist")
+        initialArtistList.map( (artist: Artist) => artistService.addArtist(artist));
     }
 
 }

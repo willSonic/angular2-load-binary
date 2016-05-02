@@ -9,14 +9,14 @@
 import {
   Component
 } from 'angular2/core';
+
 import { bootstrap } from 'angular2/platform/browser';
 
 /*
  * Components
  */
-import {ChatNavBar} from './components/ChatNavBar';
-import {ChatThreads} from './components/ChatThreads';
-import {ChatWindow} from './components/ChatWindow';
+import {NavBarBasic} from './components/NavBarComponent';
+import {ArtistList} from './components/ArtistListComponent';
 
 /*
  * Injectables
@@ -40,19 +40,27 @@ require('../css/styles.scss');
 
 @Component({
   selector: 'harness',
-  directives: [PlayListComponent],
+  directives: [NavBarBasic, ArtistList],
   template: `
-          <div id="content">
+          <div>
+            <nav-bar-basic></nav-bar-basic>
             <div class="container">
-              <harness></harness>
+              <artist-list></artist-list>
             </div>
           </div>
           `
 })
 class  Harness {
-  constructor( public artistService: ArtistService) {
-    BinaryLoadExampleData.init(ArtistService);
+  constructor(public artistService: ArtistService) {
+    BinaryLoadExampleData.init(artistService);
+
   }
 }
 
 bootstrap(Harness, [ servicesInjectables, utilInjectables ]);
+
+require('./services/services');
+require('./BinaryLoadExampleData');
+require('./util/util');
+require('./components/NavBarComponent');
+

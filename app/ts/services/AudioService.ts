@@ -1,12 +1,12 @@
 import {Injectable, bind} from 'angular2/core';
 import {Subject, BehaviorSubject, Observable} from 'rxjs';
-import {Artist, AudioData} from '../models';
+import {BinaryData, AudioData, Artist} from '../models';
 
 
-let initialAudioData: AudioData[] = [];
+let initialAudioDataList: AudioData[] = [];
 
-interface IAudioDataOperation extends Function {
-  (audioData: AudioData[]): AudioData[];
+interface IAudioDatasOperation extends Function {
+  (audioList: AudioData[]): AudioData[];
 }
 
 /**
@@ -16,10 +16,10 @@ interface IAudioDataOperation extends Function {
 export class AudioService {
 
   // a stream that publishes new arist only once
-  newArtists: Subject<AudioData> = new Subject<AudioData>();
+  newAudioData: Subject<AudioData> = new Subject<AudioData>();
 
   // `artists` is a observable that contains the mo
-  artists: Observable<AudioData[]>;
+  audioList: Observable<AudioData[]>;
 
   // `updates` receives _operations_ to be applied to our `artist`
   // it's a way we can perform changes on *all* artists (that are currently
@@ -27,21 +27,21 @@ export class AudioService {
   updates: Subject<any> = new Subject<any>();
 
   // `current Artist` contains the current arist
-  currentArtist: Subject<Artist> = new BehaviorSubject< Artist>(new Artist());
+  currentBinaryDataList: Observable<BinaryData[]>;
 
 
   // action streams
-  create: Subject<Artist> = new Subject<Artist>();
+  create: Subject<AudioData> = new Subject<AudioData>();
 
   markAudioAsLoaded: Subject<any> = new Subject<any>();
 
   constructor() {
 
       // watch the updates and accumulate operations on the messages
-      this.artists = this.updates.scan(
-                  (artists: Artist[],  operation: IArtistOperation) => {
-                     return operation(artists);
-                   }, initialArtists)
+      this.audioList = this.updates.scan(
+                  (audioList: AudioData[],  operation: IAudioDatasOperation) => {
+                     return operation(audioList);
+                   }, initialAudioDataList)
         // make sure we can share the most recent list of artists across anyone
         // who's interested in subscribing and cache the last known list of
         // artists
@@ -49,23 +49,23 @@ export class AudioService {
           .refCount();
 
       this.create
-          .map( function(artist: Artist): IArtistOperation {
-            return (artists: Artist[]) => { return artists.concat(Artist);  };
+          .map( function(audioData: AudioData): IAudioDatasOperation {
+            return (audioList: AudioData[]) => { return audioList.concat(audioData);  };
           }).subscribe(this.updates);
 
-      this.newArtists.subscribe(this.create);
+      this.newAudioData.subscribe(this.create);
 
       this.markAudioAsLoaded
-        .map( (audioData: AudioData) => {
-          return (artists: Artist[]) => {
-            return artists.map( (artist: Artist) => {
+        .map( (binaryData: BinaryData) => {
+          return (audioList: AudioData[]) => {
+            return audioList.map( (audioData: AudioData) => {
               // note that we're manipulating `artist` directly here. Mutability
               // can be confusing and there are lots of reasons why you might want
               // to, say, copy the Artist object or some other 'immutable' here
-              if (artist.audioData.id === audioData.id) {
-                  artist.binaryLoaded = true;
+              if (audioData.binaryData.id === binaryData.id) {
+                  audioData.binaryLoaded = true;
               }
-              return artist;
+              return audioData;
             });
           };
         })
@@ -74,12 +74,12 @@ export class AudioService {
     }
 
     // an imperative function call to this action stream
-    addArtist(artist: Artist): void {
-       this.newArtists.next(artist);
+    addAudioData(audioData: AudioData): void {
+       this.newAudioData.next(audioData);
     }
 
-  public setCurrentArtist(newArtist: Artist): void {
-     this.currentArtist.next(newArtist);
+  public setCurrentAudioData(newAudioData: AudioData): void {
+     //this.currentAudioData.next(newAudioData);
   }
 
 }
